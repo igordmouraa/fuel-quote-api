@@ -3,35 +3,35 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13
+    env_file:
+      - .env.development
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: fuel_db
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_DATABASE:-fuel_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
 
   api:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env.development
     ports:
       - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: securepassword
-      DB_DATABASE: fuel_db
+    restart: unless-stopped
 
 volumes:
   postgres_data:
