@@ -1,5 +1,4 @@
-// gas-station.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Quotation } from '../../quotation/entities/quotation.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -24,4 +23,12 @@ export class GasStation {
   @OneToMany(() => Quotation, (quotation) => quotation.gas_station)
   @ApiProperty({ type: () => Quotation, isArray: true })
   quotations: Quotation[];
+
+  @CreateDateColumn()
+  @ApiProperty({ type: String })
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @ApiProperty({ type: String })
+  updatedAt: Date;
 }
