@@ -18,33 +18,33 @@ export class GasStationController {
   constructor(private readonly gasStationService: GasStationService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Criar um novo posto' })
-  @ApiResponse({ status: 201, description: 'Posto criado com sucesso' })
-  create(@Body() createPostoDto: CreateGasStationDto) {
-    return this.gasStationService.create(createPostoDto);
+  @ApiOperation({ summary: 'Create a new gas station' })
+  @ApiResponse({ status: 201, description: 'Gas station created successfully' })
+  create(@Body() createGasStationDto: CreateGasStationDto) {
+    return this.gasStationService.create(createGasStationDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os postos' })
+  @ApiOperation({ summary: 'List all gas stations' })
   findAll() {
     return this.gasStationService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Obter um posto pelo ID' })
+  @ApiOperation({ summary: 'Get a gas station by ID' })
   findOne(@Param('id') id: string) {
     return this.gasStationService.findOne(+id);
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar um posto' })
-  @ApiResponse({ status: 200, description: 'Posto atualizado com sucesso' })
+  @ApiOperation({ summary: 'Update a gas station by ID' })
+  @ApiResponse({ status: 200, description: 'Gas station updated successfully' })
   update(@Param('id') id: string, @Body() updateGasStationDto: UpdateGasStationDto) {
     return this.gasStationService.update(+id, updateGasStationDto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover um posto' })
+  @ApiOperation({ summary: 'Delete a gas station by ID' })
   remove(@Param('id') id: string) {
     return this.gasStationService.remove(+id);
   }
