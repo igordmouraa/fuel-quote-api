@@ -46,9 +46,12 @@ export class QuotationService {
   async generateReport(reportDto: ReportDto) {
     const { gasType, initialDate, finalDate, city } = reportDto;
 
+    const startDate = new Date(initialDate);
+    const endDate = new Date(finalDate);
+
     const where: any = {
       gasType,
-      date: Between(initialDate, finalDate),
+      date: Between(startDate, endDate),
     };
 
     if (city) {
@@ -64,7 +67,10 @@ export class QuotationService {
       order: { date: 'ASC' },
     });
 
-    const total = quotations.reduce((sum, quotation) => sum + quotation.price, 0);
+    const total = quotations.reduce(
+      (sum, quotation) => sum + (typeof quotation.price === 'string' ? parseFloat(quotation.price) : quotation.price),
+      0
+    );
 
     return {
       quotations: quotations.map((quotation) => ({
