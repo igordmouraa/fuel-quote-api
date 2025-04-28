@@ -1,26 +1,44 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEnum, ValidateIf } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Validate,
+} from 'class-validator';
 import { GasType } from '../entities/quotation.entity';
+import { IsBeforeConstraint } from '../../utils/date-validator';
 
 export class ReportDto {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Data inicial do relatório',
+    example: '2025-04-01T00:00:00.000Z',
+  })
   @IsDateString()
-  initialDate: Date;
+  initialDate: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Data final do relatório',
+    example: '2025-04-30T23:59:59.999Z',
+  })
   @IsDateString()
-  finalDate: Date;
+  @Validate(IsBeforeConstraint, ['initialDate'])
+  finalDate: string;
 
-  @ApiProperty({ enum: GasType })
+  @ApiProperty({
+    enum: GasType,
+    enumName: 'GasType',
+    example: 'gasoline',
+  })
   @IsEnum(GasType)
   gasType: GasType;
 
-  @ApiProperty()
-  @IsDateString()
-  city: string;
-
-  @ValidateIf((o) => o.initialDate > o.finalDate)
-  validateDates() {
-    throw new Error('initialDate must be before finalDate');
-  }
+  @ApiProperty({
+    description: 'Cidade para filtrar os postos',
+    required: false,
+    example: 'Franca',
+  })
+  @IsOptional()
+  @IsString()
+  city?: string;
 }
