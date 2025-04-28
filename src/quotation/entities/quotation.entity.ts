@@ -1,5 +1,6 @@
 // quotation.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Transform } from 'class-transformer';
 import { GasStation } from '../../gas-station/entities/gas-station.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -27,11 +28,20 @@ export class Quotation {
   @ApiProperty({ enum: GasType })
   gasType: GasType;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Transform(({ value }) => parseFloat(value), { toClassOnly: true })
   @ApiProperty()
   price: number;
 
   @Column()
   @ApiProperty()
   date: Date;
+
+  @CreateDateColumn()
+  @ApiProperty({ type: String })
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @ApiProperty({ type: String })
+  updatedAt: Date;
 }
