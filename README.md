@@ -26,7 +26,7 @@ API para gerenciamento de cotações de combustíveis com relatórios avançados
 
 2. Crie o arquivo de configuração a partir do `.env.example`:
     ```bash
-    cp .env.example .env
+    .env
     ```
 
 3. Inicie os containers:
