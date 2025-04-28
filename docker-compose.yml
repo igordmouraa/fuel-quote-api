@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:13
     env_file:
-      - .env.development
+      - .env
     environment:
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
@@ -25,13 +25,34 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file:
-      - .env.development
+      - .env
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 0"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
     restart: unless-stopped
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      RUN_TESTS: "true"
+    depends_on:
+      api:
+        condition: service_started
+    volumes:
+      - ./test:/app/test
+    command: ["/bin/bash", "/entrypoint.sh"]
 
 volumes:
   postgres_data:
