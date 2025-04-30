@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { GasStationModule } from './gas-station/gas-station.module';
 import { QuotationModule } from './quotation/quotation.module';
 import { TerminusModule } from '@nestjs/terminus';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -16,5 +17,6 @@ import { TerminusModule } from '@nestjs/terminus';
     QuotationModule,
     TerminusModule
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
