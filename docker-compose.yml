@@ -3,19 +3,20 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13
-    env_file:
-      - .env
+    env_file: .env
     environment:
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_DATABASE:-fuel_db}
+      TZ: UTC
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fuel_db"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 15
+      start_period: 10s
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -24,16 +25,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - .env
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      TZ: UTC
     ports:
       - "3000:3000"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 0"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+      test: ["CMD-SHELL", "sleep 15 && curl -f http://localhost:3000/health || exit 1"]
+      interval: 20s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
     depends_on:
       postgres:
         condition: service_healthy
@@ -43,13 +46,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - .env
+    env_file: .env
     environment:
       RUN_TESTS: "true"
+      NODE_ENV: test
     depends_on:
       api:
-        condition: service_started
+        condition: service_healthy
     volumes:
       - ./test:/app/test
     command: ["/bin/bash", "/entrypoint.sh"]
