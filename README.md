@@ -34,6 +34,11 @@ API para gerenciamento de cotações de combustíveis com relatórios avançados
     docker-compose up -d --build
     ```
 
+## ⚠️ Atenção: Quebra de Linha (LF)
+Para evitar erros em sistemas Unix/Linux (especialmente ao rodar scripts no Docker, como entrypoint.sh), certifique-se de que todos os arquivos shell (.sh) e o próprio Dockerfile utilizem quebras de linha no formato LF (Line Feed), e não CRLF (Carriage Return + Line Feed).
+
+> No VS Code, você pode alterar isso facilmente clicando no canto inferior direito onde aparece "CRLF" e selecionando "LF".
+
 ## 🌐 Acesso à API
 
 - Swagger UI: [http://localhost:3000/api](http://localhost:3000/api)
