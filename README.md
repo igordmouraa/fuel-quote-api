@@ -104,7 +104,7 @@ fuel-quote-api/
 
 ## 🏆 Considerações Finais
 
-Este projeto é de um desafio em backend, e segue boas práticas de desenvolvimento com NestJS, incluindo organização modular, uso de DTOs, entidades bem definidas e cobertura de testes unitários automatizados.
+Este projeto é de um desafio em backend, e segue boas práticas de desenvolvimento com NestJS, incluindo organização modular, uso de DTOs, entidades bem definidas e cobertura de testes de integração automatizados.
 
 ## 📄 Licença
 Este projeto está licenciado sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
