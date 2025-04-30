@@ -32,11 +32,11 @@ services:
     ports:
       - "3000:3000"
     healthcheck:
-      test: ["CMD-SHELL", "sleep 15 && curl -f http://localhost:3000/health || exit 1"]
+      test: [ "CMD-SHELL", "curl -f http://127.0.0.1:3000/health || exit 1" ]
       interval: 20s
-      timeout: 15s
+      timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
     depends_on:
       postgres:
         condition: service_healthy
